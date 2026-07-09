@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JEE Main 2026 — Cutoff & Percentile Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg:        #0a0f1e;
+    --bg2:       #0f1629;
+    --bg3:       #151d35;
+    --border:    #1e2d50;
+    --border2:   #243360;
+    --accent:    #3b82f6;
+    --accent2:   #60a5fa;
+    --gold:      #f59e0b;
+    --green:     #10b981;
+    --red:       #ef4444;
+    --purple:    #a78bfa;
+    --text:      #e2e8f0;
+    --text2:     #94a3b8;
+    --text3:     #64748b;
+    --jan:       #3b82f6;
+    --apr:       #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #0a0f1e 0%, #0f1a3a 50%, #0a0f1e 100%);
+    border-bottom: 1px solid var(--border2);
+    padding: 40px 24px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 800px 300px at 50% 0%, rgba(59,130,246,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent2);
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight: 800; color: #fff;
+    letter-spacing: -0.03em; line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .header h1 span { color: var(--accent2); }
+  .header-sub {
+    color: var(--text2); font-size: 14px; margin-bottom: 28px;
+  }
+
+  /* ── HERO STATS ── */
+  .hero-stats {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    justify-content: center; margin-top: 8px;
+  }
+  .hero-stat {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 10px; padding: 14px 20px;
+    min-width: 100px; text-align: center;
+  }
+  .hero-stat .val {
+    font-size: 22px; font-weight: 800; color: #fff;
+    font-family: 'JetBrains Mono', monospace; display: block;
+  }
+  .hero-stat .lbl {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text3); margin-top: 2px;
+  }
+
+  /* ── NAV TABS ── */
+  .nav {
+    display: flex; gap: 4px; padding: 16px 24px 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto; background: var(--bg2);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-tab {
+    padding: 8px 16px; border-radius: 6px 6px 0 0;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    white-space: nowrap; transition: all 0.2s;
+    border: 1px solid transparent; border-bottom: none;
+    color: var(--text2); background: transparent;
+  }
+  .nav-tab:hover { color: var(--text); background: var(--bg3); }
+  .nav-tab.active {
+    background: var(--bg3); color: #fff;
+    border-color: var(--border2); border-bottom-color: var(--bg3);
+    position: relative; bottom: -1px;
+  }
+
+  /* ── CONTENT ── */
+  .content { max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .sec-head {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px;
+  }
+  .sec-head h2 {
+    font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.02em;
+  }
+  .sec-head .pill {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 3px 9px; border-radius: 20px;
+  }
+  .pill-jan { background: rgba(59,130,246,0.15); color: var(--jan); border: 1px solid rgba(59,130,246,0.3); }
+  .pill-apr { background: rgba(245,158,11,0.15); color: var(--apr); border: 1px solid rgba(245,158,11,0.3); }
+  .pill-both { background: rgba(167,139,250,0.15); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+
+  /* ── SNAPSHOT GRID ── */
+  .snapshot-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media(max-width:600px){ .snapshot-grid { grid-template-columns: 1fr; } }
+  .snapshot-card {
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 12px; padding: 20px;
+  }
+  .snapshot-card h3 {
+    font-size: 13px; font-weight: 700; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot-jan { background: var(--jan); box-shadow: 0 0 6px var(--jan); }
+  .dot-apr { background: var(--apr); box-shadow: 0 0 6px var(--apr); }
+  .snap-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0; border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .snap-row:last-child { border-bottom: none; }
+  .snap-label { color: var(--text2); }
+  .snap-val { font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #fff; }
+  .snap-val.accent { color: var(--accent2); }
+  .snap-val.gold { color: var(--gold); }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border2); margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: var(--bg3); }
+  thead th {
+    padding: 11px 14px; text-align: left; font-size: 11px;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text2); border-bottom: 1px solid var(--border2);
+    white-space: nowrap;
+  }
+  thead th:first-child { color: var(--text); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  tbody tr:hover { background: rgba(59,130,246,0.04); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td {
+    padding: 10px 14px; color: var(--text); font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; white-space: nowrap;
+  }
+  tbody td:first-child { font-family: 'Inter', sans-serif; font-weight: 600; color: #fff; }
+  .avg-row td { background: rgba(59,130,246,0.08); font-weight: 700; color: var(--accent2) !important; }
+  .avg-row td:first-child { color: var(--accent2) !important; }
+  .band-99 { color: var(--red) !important; font-weight: 700; }
+  .band-95 { color: var(--gold) !important; }
+  .band-90 { color: var(--green) !important; }
+  .hard-shift { background: rgba(239,68,68,0.06) !important; }
+  .easy-shift { background: rgba(16,185,129,0.06) !important; }
+
+  /* ── MATRIX TABLE ── */
+  .matrix-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border2); margin-bottom: 20px; }
+  .matrix-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .matrix-table thead th {
+    padding: 9px 10px; text-align: center; font-size: 10px;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text2); border-bottom: 1px solid var(--border2);
+    background: var(--bg3);
+  }
+  .matrix-table thead th:first-child { text-align: left; }
+  .matrix-table tbody tr { border-bottom: 1px solid var(--border); }
+  .matrix-table tbody td {
+    padding: 8px 10px; text-align: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--text2);
+  }
+  .matrix-table tbody td:first-child {
+    text-align: left; font-weight: 700; color: var(--accent2);
+    font-family: 'Inter', sans-serif; background: var(--bg3);
+    border-right: 1px solid var(--border2);
+  }
+  .matrix-table .top-row td { color: #fff; font-weight: 700; }
+  .matrix-table .avg-row td { background: rgba(59,130,246,0.08); color: var(--accent2); font-weight: 700; }
+  .cell-high { color: #ef4444 !important; }
+  .cell-mid  { color: #f59e0b !important; }
+  .cell-low  { color: #10b981 !important; }
+
+  /* ── RANK TABLE ── */
+  .rank-card {
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 12px; overflow: hidden; margin-bottom: 20px;
+  }
+  .rank-row {
+    display: grid; grid-template-columns: 1fr 1.2fr 1fr 1.6fr;
+    padding: 10px 16px; border-bottom: 1px solid var(--border);
+    align-items: center; font-size: 13px; transition: background 0.15s;
+  }
+  .rank-row:hover { background: rgba(59,130,246,0.04); }
+  .rank-row:last-child { border-bottom: none; }
+  .rank-row.head {
+    background: var(--bg); font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3);
+  }
+  .rank-row .pct { font-weight: 700; color: var(--accent2); font-family: 'JetBrains Mono', monospace; }
+  .rank-row .air { color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .rank-row .marks { color: var(--text2); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .rank-row .unlocks { color: var(--text2); font-size: 12px; }
+  .rank-row .top-rank { color: var(--gold); font-weight: 800; font-size: 14px; }
+  .rank-row.top-band { background: rgba(245,158,11,0.05); }
+
+  /* ── CUTOFF CATEGORY ── */
+  .cutoff-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px; margin-bottom: 20px;
+  }
+  .cutoff-cat {
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 10px; padding: 16px;
+  }
+  .cutoff-cat .cat-name {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text3); margin-bottom: 8px;
+  }
+  .cutoff-cat .pct-val {
+    font-size: 22px; font-weight: 800; color: #fff;
+    font-family: 'JetBrains Mono', monospace; margin-bottom: 4px;
+  }
+  .cutoff-cat .marks-val { color: var(--text2); font-size: 12px; }
+  .cutoff-cat .change { font-size: 11px; margin-top: 6px; }
+  .change.up { color: var(--red); }
+  .change.dn { color: var(--green); }
+
+  /* ── BUCKET CARDS ── */
+  .bucket-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px; margin-bottom: 24px;
+  }
+  .bucket-card {
+    border-radius: 10px; padding: 16px;
+    border: 1px solid transparent;
+  }
+  .bucket-easy  { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.25); }
+  .bucket-bal   { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.25); }
+  .bucket-tough { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.25); }
+  .bucket-hard  { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); }
+  .bucket-card .b-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.12em; margin-bottom: 6px;
+  }
+  .bucket-easy  .b-label { color: var(--green); }
+  .bucket-bal   .b-label { color: var(--accent2); }
+  .bucket-tough .b-label { color: var(--gold); }
+  .bucket-hard  .b-label { color: var(--red); }
+  .bucket-card .b-marks {
+    font-size: 20px; font-weight: 800; color: #fff;
+    font-family: 'JetBrains Mono', monospace; margin-bottom: 4px;
+  }
+  .bucket-card .b-pct { font-size: 12px; color: var(--text2); margin-bottom: 8px; }
+  .bucket-card .b-shifts { font-size: 11px; color: var(--text3); line-height: 1.5; }
+
+  /* ── YOY ── */
+  .yoy-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px; margin-bottom: 20px;
+  }
+  .yoy-card {
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 10px; padding: 16px;
+  }
+  .yoy-card .y-metric { font-size: 11px; color: var(--text3); margin-bottom: 8px; font-weight: 600; }
+  .yoy-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .yoy-row .y-label { font-size: 11px; color: var(--text2); }
+  .yoy-row .y-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #fff; }
+  .y-change { font-size: 12px; font-weight: 700; margin-top: 6px; }
+  .y-change.up { color: var(--red); }
+  .y-change.neutral { color: var(--text2); }
+
+  /* ── SCORE TARGET ── */
+  .target-grid {
+    display: grid; gap: 8px; margin-bottom: 20px;
+  }
+  .target-row {
+    display: grid; grid-template-columns: 130px 120px 180px 1fr;
+    gap: 12px; align-items: center;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px;
+    transition: background 0.15s;
+  }
+  .target-row:hover { background: rgba(59,130,246,0.05); border-color: var(--border2); }
+  @media(max-width:640px) {
+    .target-row { grid-template-columns: 1fr 1fr; }
+  }
+  .target-row .t-pct { font-weight: 800; color: var(--accent2); font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .target-row .t-marks { color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; }
+  .target-row .t-air { color: var(--text2); font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+  .target-row .t-unlocks { color: var(--text2); font-size: 12px; }
+  .target-row.head {
+    background: var(--bg); border-color: var(--border2);
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--text3);
+  }
+  .target-row.head .t-pct,.target-row.head .t-marks,.target-row.head .t-air,.target-row.head .t-unlocks {
+    color: var(--text3); font-family: 'Inter', sans-serif; font-weight: 700; font-size: 10px;
+  }
+
+  /* ── EXAM PATTERN ── */
+  .pattern-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px; margin-bottom: 20px;
+  }
+  .pattern-card {
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 10px; padding: 16px;
+  }
+  .pattern-card .p-key { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .pattern-card .p-val { font-size: 15px; font-weight: 700; color: #fff; }
+  .pattern-card .p-val.mono { font-family: 'JetBrains Mono', monospace; color: var(--accent2); }
+
+  /* ── INFO BOX ── */
+  .info-box {
+    background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2);
+    border-left: 3px solid var(--accent); border-radius: 8px;
+    padding: 14px 16px; margin-bottom: 16px; font-size: 13px; color: var(--text2);
+    line-height: 1.6;
+  }
+  .info-box strong { color: var(--accent2); }
+  .warn-box {
+    background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2);
+    border-left: 3px solid var(--gold); border-radius: 8px;
+    padding: 14px 16px; margin-bottom: 16px; font-size: 13px; color: var(--text2);
+  }
+  .warn-box strong { color: var(--gold); }
+
+  /* ── PREP TIPS ── */
+  .tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  @media(max-width:600px){ .tips-grid { grid-template-columns: 1fr; } }
+  .tip-section {
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 10px; padding: 18px;
+  }
+  .tip-section h3 { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+  .tip-item {
+    display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;
+  }
+  .tip-item .t-icon {
+    width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 900; margin-top: 1px;
+  }
+  .t-icon-blue { background: rgba(59,130,246,0.2); color: var(--accent2); }
+  .t-icon-gold { background: rgba(245,158,11,0.2); color: var(--gold); }
+  .tip-item .t-text { font-size: 12.5px; color: var(--text2); line-height: 1.5; }
+  .tip-item .t-text strong { color: var(--text); }
+
+  /* ── SUBJECT TARGET ── */
+  .subj-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;
+  }
+  @media(max-width:600px){ .subj-grid { grid-template-columns: 1fr; } }
+  .subj-card {
+    border-radius: 10px; padding: 16px; border: 1px solid transparent;
+  }
+  .subj-phy { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.25); }
+  .subj-chem { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.25); }
+  .subj-math { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); }
+  .subj-card .s-name { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .subj-phy .s-name { color: var(--accent2); }
+  .subj-chem .s-name { color: var(--green); }
+  .subj-math .s-name { color: var(--red); }
+  .subj-card .s-target { font-size: 18px; font-weight: 800; color: #fff; font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
+  .subj-card .s-tip { font-size: 12px; color: var(--text2); line-height: 1.4; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-eyebrow">Competishun Analysis · Updated April 2026</div>
+  <h1>JEE Main <span>2026</span><br>Cutoff & Percentile Dashboard</h1>
+  <div class="header-sub">Complete shift-by-shift score-to-percentile mapping · January & April sessions</div>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="val">300</span><span class="lbl">Max Marks</span></div>
+    <div class="hero-stat"><span class="val">18</span><span class="lbl">Total Shifts</span></div>
+    <div class="hero-stat"><span class="val">15.5L</span><span class="lbl">Candidates</span></div>
+    <div class="hero-stat"><span class="val">75</span><span class="lbl">Questions</span></div>
+    <div class="hero-stat"><span class="val">26</span><span class="lbl">100 Percentilers</span></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-tab active" onclick="showTab('overview')">Overview</div>
+  <div class="nav-tab" onclick="showTab('january')">January Shifts</div>
+  <div class="nav-tab" onclick="showTab('april')">April Shifts</div>
+  <div class="nav-tab" onclick="showTab('jan-matrix')">Jan Matrix</div>
+  <div class="nav-tab" onclick="showTab('apr-matrix')">Apr Matrix</div>
+  <div class="nav-tab" onclick="showTab('ranks')">Percentile → Rank</div>
+  <div class="nav-tab" onclick="showTab('cutoff')">Adv. Cutoff</div>
+  <div class="nav-tab" onclick="showTab('targets')">Score Targets</div>
+  <div class="nav-tab" onclick="showTab('prep')">Prep Guide</div>
+</div>
+
+<div class="content">
+
+  <!-- ══ OVERVIEW ══ -->
+  <div id="overview" class="section active">
+    <div class="sec-head"><h2>99-Percentile Snapshot — Both Sessions</h2><span class="pill pill-both">Both Sessions</span></div>
+
+    <div class="snapshot-grid">
+      <div class="snapshot-card">
+        <h3><span class="dot dot-jan"></span>January 2026</h3>
+        <div class="snap-row"><span class="snap-label">Avg 99%ile Threshold</span><span class="snap-val accent">≈ 172 marks</span></div>
+        <div class="snap-row"><span class="snap-label">Median 99%ile</span><span class="snap-val">174 marks</span></div>
+        <div class="snap-row"><span class="snap-label">Score-Friendly Slot</span><span class="snap-val">22 Jan Morning</span></div>
+        <div class="snap-row"><span class="snap-label">High-Pressure Slot</span><span class="snap-val">22 Jan Evening</span></div>
+        <div class="snap-row"><span class="snap-label">Range (99%ile)</span><span class="snap-val">154 – 188</span></div>
+        <div class="snap-row"><span class="snap-label">Total Shifts</span><span class="snap-val">10</span></div>
+        <div class="snap-row"><span class="snap-label">Appearing Candidates</span><span class="snap-val">≈ 13.04 Lakh</span></div>
+      </div>
+      <div class="snapshot-card">
+        <h3><span class="dot dot-apr"></span>April 2026</h3>
+        <div class="snap-row"><span class="snap-label">Avg 99%ile Threshold</span><span class="snap-val gold">≈ 175 marks</span></div>
+        <div class="snap-row"><span class="snap-label">Median 99%ile</span><span class="snap-val">175 marks</span></div>
+        <div class="snap-row"><span class="snap-label">Score-Friendly Slot</span><span class="snap-val">5 Apr Morning</span></div>
+        <div class="snap-row"><span class="snap-label">High-Pressure Slot</span><span class="snap-val">6 Apr Morning</span></div>
+        <div class="snap-row"><span class="snap-label">Range (99%ile)</span><span class="snap-val">160 – 192</span></div>
+        <div class="snap-row"><span class="snap-label">Total Shifts</span><span class="snap-val">8</span></div>
+        <div class="snap-row"><span class="snap-label">Appearing Candidates</span><span class="snap-val">≈ 10.30 Lakh</span></div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Key insight:</strong> January was slightly tougher than April — roughly 3 fewer marks needed on average for the same percentile. April's spread (32 marks) was narrower than January's (34 marks), pointing to more uniform paper-setting in Session 2. <strong>Never compare raw marks across sessions — always look at the percentile.</strong>
+    </div>
+
+    <div class="sec-head" style="margin-top:28px"><h2>4-Bucket Shift Classification</h2><span class="pill pill-both">All 18 Shifts</span></div>
+    <div class="bucket-grid">
+      <div class="bucket-card bucket-easy">
+        <div class="b-label">Score-Friendly</div>
+        <div class="b-marks">186+ marks</div>
+        <div class="b-pct">≈ 22% of shifts</div>
+        <div class="b-shifts">22 Jan S1, 28 Jan S1, 5 Apr S1, 6 Apr S2<br>Easier paper — high marks needed for same percentile</div>
+      </div>
+      <div class="bucket-card bucket-bal">
+        <div class="b-label">Balanced</div>
+        <div class="b-marks">170–180 marks</div>
+        <div class="b-pct">≈ 44% of shifts</div>
+        <div class="b-shifts">21 Jan S2, 24 Jan S1/S2, 28 Jan S2, 2 Apr S1, 4 Apr S1/S2, 5 Apr S2<br>Most common scenario</div>
+      </div>
+      <div class="bucket-card bucket-tough">
+        <div class="b-label">Slightly Tough</div>
+        <div class="b-marks">165–172 marks</div>
+        <div class="b-pct">≈ 17% of shifts</div>
+        <div class="b-shifts">23 Jan S1, 2 Apr S2<br>Challenging but manageable</div>
+      </div>
+      <div class="bucket-card bucket-hard">
+        <div class="b-label">High-Pressure</div>
+        <div class="b-marks">152–162 marks</div>
+        <div class="b-pct">≈ 17% of shifts</div>
+        <div class="b-shifts">21 Jan S1, 22 Jan S2, 23 Jan S2, 6 Apr S1<br>Tough paper — lower marks still yield high percentile</div>
+      </div>
+    </div>
+
+    <div class="warn-box">
+      <strong>Takeaway:</strong> Stop worrying about which slot you'll get. Aim to consistently score at the 99-percentile band, and let normalisation do the rest. NTA's system is engineered to give every candidate a fair playing field.
+    </div>
+
+    <div class="sec-head" style="margin-top:28px"><h2>2025 vs 2026 — Year-on-Year</h2><span class="pill pill-both">Comparison</span></div>
+    <div class="yoy-grid">
+      <div class="yoy-card">
+        <div class="y-metric">Total Unique Candidates</div>
+        <div class="yoy-row"><span class="y-label">2025</span><span class="y-val">14.75 Lakh</span></div>
+        <div class="yoy-row"><span class="y-label">2026</span><span class="y-val">15.50 Lakh</span></div>
+        <div class="y-change up">↑ +5.1%</div>
+      </div>
+      <div class="yoy-card">
+        <div class="y-metric">100 Percentilers</div>
+        <div class="yoy-row"><span class="y-label">2025</span><span class="y-val">24</span></div>
+        <div class="yoy-row"><span class="y-label">2026</span><span class="y-val">26</span></div>
+        <div class="y-change up">↑ +2 candidates</div>
+      </div>
+      <div class="yoy-card">
+        <div class="y-metric">Avg Marks for 99%ile</div>
+        <div class="yoy-row"><span class="y-label">2025</span><span class="y-val">≈ 170</span></div>
+        <div class="yoy-row"><span class="y-label">2026</span><span class="y-val">≈ 174</span></div>
+        <div class="y-change up">↑ +4 marks</div>
+      </div>
+      <div class="yoy-card">
+        <div class="y-metric">Avg Marks for 95%ile</div>
+        <div class="yoy-row"><span class="y-label">2025</span><span class="y-val">≈ 115</span></div>
+        <div class="yoy-row"><span class="y-label">2026</span><span class="y-val">≈ 119</span></div>
+        <div class="y-change up">↑ +4 marks</div>
+      </div>
+      <div class="yoy-card">
+        <div class="y-metric">Avg Marks for 90%ile</div>
+        <div class="yoy-row"><span class="y-label">2025</span><span class="y-val">≈ 90</span></div>
+        <div class="yoy-row"><span class="y-label">2026</span><span class="y-val">≈ 93</span></div>
+        <div class="y-change up">↑ +3 marks</div>
+      </div>
+      <div class="yoy-card">
+        <div class="y-metric">JEE Adv. Cutoff (General)</div>
+        <div class="yoy-row"><span class="y-label">2025</span><span class="y-val">93.10%ile</span></div>
+        <div class="yoy-row"><span class="y-label">2026</span><span class="y-val">93.41%ile</span></div>
+        <div class="y-change up">↑ +0.31</div>
+      </div>
+    </div>
+    <div class="info-box">
+      <strong>For 2027 aspirants:</strong> Competition continues to intensify — about 75,000 more candidates appeared in 2026 vs 2025. Cutoffs rose in every category. To stay competitive, aim 5–10 marks higher than the previous year's threshold for your target percentile band.
+    </div>
+  </div>
+
+  <!-- ══ JANUARY SHIFTS ══ -->
+  <div id="january" class="section">
+    <div class="sec-head"><h2>January 2026 — Shift-Wise Score-to-Percentile</h2><span class="pill pill-jan">Session 1</span></div>
+    <div class="info-box">S1 = Morning, S2 = Evening. Highlighted bands: <span style="color:var(--red)">■ 99%ile</span> &nbsp; <span style="color:var(--gold)">■ 95%ile</span> &nbsp; <span style="color:var(--green)">■ 90%ile</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Shift (Date & Slot)</th>
+            <th>99.9%ile Band</th>
+            <th class="band-99">99%ile Band</th>
+            <th class="band-95">95%ile Band</th>
+            <th class="band-90">90%ile Band</th>
+            <th>Adv. Qualifying</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>21 Jan — Morning</td><td>222–226</td><td class="band-99">156–160</td><td class="band-95">100–104</td><td class="band-90">74–78</td><td>88–91</td></tr>
+          <tr><td>21 Jan — Evening</td><td>228–232</td><td class="band-99">172–176</td><td class="band-95">121–125</td><td class="band-90">97–101</td><td>109–113</td></tr>
+          <tr class="easy-shift"><td>22 Jan — Morning ✦</td><td>241–245</td><td class="band-99">184–188</td><td class="band-95">127–131</td><td class="band-90">104–108</td><td>115–119</td></tr>
+          <tr class="hard-shift"><td>22 Jan — Evening ✕</td><td>217–221</td><td class="band-99">152–156</td><td class="band-95">97–101</td><td class="band-90">74–78</td><td>86–90</td></tr>
+          <tr><td>23 Jan — Morning</td><td>225–229</td><td class="band-99">164–168</td><td class="band-95">110–114</td><td class="band-90">89–93</td><td>99–103</td></tr>
+          <tr class="hard-shift"><td>23 Jan — Evening ✕</td><td>222–226</td><td class="band-99">156–160</td><td class="band-95">99–103</td><td class="band-90">76–80</td><td>88–92</td></tr>
+          <tr><td>24 Jan — Morning</td><td>230–234</td><td class="band-99">172–176</td><td class="band-95">110–114</td><td class="band-90">85–89</td><td>97–101</td></tr>
+          <tr><td>24 Jan — Evening</td><td>234–238</td><td class="band-99">176–180</td><td class="band-95">118–122</td><td class="band-90">92–96</td><td>105–109</td></tr>
+          <tr class="easy-shift"><td>28 Jan — Morning ✦</td><td>240–244</td><td class="band-99">186–190</td><td class="band-95">118–122</td><td class="band-90">92–96</td><td>105–109</td></tr>
+          <tr><td>28 Jan — Evening</td><td>235–239</td><td class="band-99">178–182</td><td class="band-95">111–115</td><td class="band-90">87–91</td><td>99–103</td></tr>
+          <tr class="avg-row"><td>Average</td><td>≈ 230</td><td>≈ 172</td><td>≈ 113</td><td>≈ 87</td><td>≈ 99</td></tr>
+          <tr class="avg-row"><td>Spread</td><td>217–245</td><td>152–190</td><td>97–131</td><td>74–108</td><td>86–119</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn-box">
+      <strong>Pattern:</strong> 22 Jan Morning was the score-friendly day (easier paper = higher marks needed). 22 Jan Evening was the toughest, requiring the highest marks (186–190) for 99%ile. 22 Jan Morning was Maths-heavy, requiring higher marks (156–190) for 99 percentile. 23 Jan Evening had a difficult Mathematics section that compressed scores at the top end.
+      &nbsp; ✦ = Score-Friendly &nbsp; ✕ = High-Pressure
+    </div>
+
+    <div class="sec-head" style="margin-top:28px"><h2>99%ile Marks by Shift — January Quick Reference</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Shift</th><th class="band-99">99%ile Score</th><th>Classification</th></tr></thead>
+        <tbody>
+          <tr><td>21 Jan Morning</td><td class="band-99">158</td><td style="color:var(--red)">High-Pressure</td></tr>
+          <tr><td>21 Jan Evening</td><td class="band-99">174</td><td style="color:var(--accent2)">Balanced</td></tr>
+          <tr class="easy-shift"><td>22 Jan Morning ✦</td><td class="band-99">186</td><td style="color:var(--green)">Score-Friendly</td></tr>
+          <tr class="hard-shift"><td>22 Jan Evening ✕</td><td class="band-99">154</td><td style="color:var(--red)">High-Pressure</td></tr>
+          <tr><td>23 Jan Morning</td><td class="band-99">166</td><td style="color:var(--gold)">Slightly Tough</td></tr>
+          <tr class="hard-shift"><td>23 Jan Evening ✕</td><td class="band-99">158</td><td style="color:var(--red)">High-Pressure</td></tr>
+          <tr><td>24 Jan Morning</td><td class="band-99">174</td><td style="color:var(--accent2)">Balanced</td></tr>
+          <tr><td>24 Jan Evening</td><td class="band-99">178</td><td style="color:var(--accent2)">Balanced</td></tr>
+          <tr class="easy-shift"><td>28 Jan Morning ✦</td><td class="band-99">188</td><td style="color:var(--green)">Score-Friendly</td></tr>
+          <tr><td>28 Jan Evening</td><td class="band-99">180</td><td style="color:var(--accent2)">Balanced</td></tr>
+          <tr class="avg-row"><td>Average / Median</td><td class="band-99">172 / 174</td><td style="color:var(--text2)">Range: 154–188</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ APRIL SHIFTS ══ -->
+  <div id="april" class="section">
+    <div class="sec-head"><h2>April 2026 — Shift-Wise Score-to-Percentile</h2><span class="pill pill-apr">Session 2</span></div>
+    <div class="info-box">S1 = Morning, S2 = Evening. April's distribution is tighter and more calibrated — 99%ile band sits in a narrower 158–192 range vs January's 152–190.</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Shift (Date & Slot)</th>
+            <th>99.9%ile Band</th>
+            <th class="band-99">99%ile Band</th>
+            <th class="band-95">95%ile Band</th>
+            <th class="band-90">90%ile Band</th>
+            <th>Adv. Qualifying</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>2 Apr — Morning</td><td>231–235</td><td class="band-99">173–177</td><td class="band-95">123–127</td><td class="band-90">98–102</td><td>110–114</td></tr>
+          <tr><td>2 Apr — Evening</td><td>219–223</td><td class="band-99">163–167</td><td class="band-95">116–120</td><td class="band-90">95–99</td><td>106–110</td></tr>
+          <tr><td>4 Apr — Morning</td><td>228–232</td><td class="band-99">173–177</td><td class="band-95">128–132</td><td class="band-90">103–107</td><td>114–118</td></tr>
+          <tr><td>4 Apr — Evening</td><td>227–231</td><td class="band-99">172–176</td><td class="band-95">122–126</td><td class="band-90">97–101</td><td>109–113</td></tr>
+          <tr class="easy-shift"><td>5 Apr — Morning ✦</td><td>250–254</td><td class="band-99">188–192</td><td class="band-95">135–139</td><td class="band-90">108–112</td><td>120–124</td></tr>
+          <tr><td>5 Apr — Evening</td><td>229–233</td><td class="band-99">173–177</td><td class="band-95">123–127</td><td class="band-90">98–102</td><td>110–114</td></tr>
+          <tr class="hard-shift"><td>6 Apr — Morning ✕</td><td>216–220</td><td class="band-99">158–162</td><td class="band-95">103–107</td><td class="band-90">83–87</td><td>94–98</td></tr>
+          <tr class="easy-shift"><td>6 Apr — Evening ✦</td><td>239–243</td><td class="band-99">181–185</td><td class="band-95">129–133</td><td class="band-90">104–108</td><td>116–120</td></tr>
+          <tr class="avg-row"><td>Average</td><td>≈ 230</td><td>≈ 175</td><td>≈ 124</td><td>≈ 99</td><td>≈ 111</td></tr>
+          <tr class="avg-row"><td>Spread</td><td>216–254</td><td>158–192</td><td>103–139</td><td>83–112</td><td>94–124</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn-box">
+      <strong>Pattern:</strong> 5 Apr Morning was April's clear score-friendly slot (250+ for 99.9%ile). 6 Apr Morning was the toughest — 99%ile achievable at just 150+. 6 Apr Evening swung the other way with a relatively scoring Physics section. Most shifts bunched in the 173–177 band for 99%ile, indicating well-calibrated paper-setting.
+      &nbsp; ✦ = Score-Friendly &nbsp; ✕ = High-Pressure
+    </div>
+
+    <div class="sec-head" style="margin-top:28px"><h2>99%ile Marks by Shift — April Quick Reference</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Shift</th><th class="band-99">99%ile Score</th><th>Classification</th></tr></thead>
+        <tbody>
+          <tr><td>2 Apr Morning</td><td class="band-99">175</td><td style="color:var(--accent2)">Balanced</td></tr>
+          <tr><td>2 Apr Evening</td><td class="band-99">165</td><td style="color:var(--gold)">Slightly Tough</td></tr>
+          <tr><td>4 Apr Morning</td><td class="band-99">175</td><td style="color:var(--accent2)">Balanced</td></tr>
+          <tr><td>4 Apr Evening</td><td class="band-99">174</td><td style="color:var(--accent2)">Balanced</td></tr>
+          <tr class="easy-shift"><td>5 Apr Morning ✦</td><td class="band-99">190</td><td style="color:var(--green)">Score-Friendly</td></tr>
+          <tr><td>5 Apr Evening</td><td class="band-99">175</td><td style="color:var(--accent2)">Balanced</td></tr>
+          <tr class="hard-shift"><td>6 Apr Morning ✕</td><td class="band-99">160</td><td style="color:var(--red)">High-Pressure</td></tr>
+          <tr class="easy-shift"><td>6 Apr Evening ✦</td><td class="band-99">183</td><td style="color:var(--green)">Score-Friendly</td></tr>
+          <tr class="avg-row"><td>Average / Median</td><td class="band-99">175 / 175</td><td style="color:var(--text2)">Range: 160–192</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ JAN MATRIX ══ -->
+  <div id="jan-matrix" class="section">
+    <div class="sec-head"><h2>January 2026 — Percentile vs Marks Matrix</h2><span class="pill pill-jan">Session 1</span></div>
+    <div class="info-box">Cross-check your shift column with the percentile row. If you scored 145 in 24 Jan Morning, you're sitting near 97 percentile. The same 145 in 22 Jan Evening would put you at ~97.5 percentile (tougher shift = better normalisation). <strong>Always look at the column for your shift.</strong></div>
+    <div class="matrix-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>Percentile</th>
+            <th>21 S1</th><th>21 S2</th>
+            <th>22 S1</th><th>22 S2</th>
+            <th>23 S1</th><th>23 S2</th>
+            <th>24 S1</th><th>24 S2</th>
+            <th>28 S1</th><th>28 S2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="top-row"><td>99.9</td><td>224</td><td>230</td><td class="cell-high">243</td><td>219</td><td>227</td><td>224</td><td>232</td><td>236</td><td class="cell-high">242</td><td>237</td></tr>
+          <tr><td>99.5</td><td>189</td><td>200</td><td>212</td><td>184</td><td>193</td><td>188</td><td>200</td><td>205</td><td>213</td><td>207</td></tr>
+          <tr><td>99</td><td class="cell-low">158</td><td>174</td><td class="cell-high">186</td><td class="cell-low">154</td><td>166</td><td class="cell-low">158</td><td>174</td><td>178</td><td class="cell-high">188</td><td>180</td></tr>
+          <tr><td>98.5</td><td>143</td><td>162</td><td>173</td><td>140</td><td>152</td><td>144</td><td>160</td><td>164</td><td>173</td><td>165</td></tr>
+          <tr><td>98</td><td>132</td><td>153</td><td>163</td><td>130</td><td>141</td><td>134</td><td>149</td><td>154</td><td>162</td><td>155</td></tr>
+          <tr><td>97.5</td><td>125</td><td>145</td><td>156</td><td>122</td><td>134</td><td>126</td><td>141</td><td>146</td><td>154</td><td>148</td></tr>
+          <tr><td>97</td><td>119</td><td>139</td><td>149</td><td>116</td><td>127</td><td>120</td><td>134</td><td>138</td><td>146</td><td>140</td></tr>
+          <tr><td>96.5</td><td>113</td><td>133</td><td>143</td><td>110</td><td>121</td><td>114</td><td>128</td><td>132</td><td>140</td><td>134</td></tr>
+          <tr><td>96</td><td>108</td><td>128</td><td>138</td><td>105</td><td>116</td><td>108</td><td>123</td><td>127</td><td>134</td><td>129</td></tr>
+          <tr><td>95.5</td><td>104</td><td>124</td><td>134</td><td>101</td><td>112</td><td>104</td><td>119</td><td>123</td><td>130</td><td>124</td></tr>
+          <tr><td>95</td><td>100</td><td>121</td><td>129</td><td>97</td><td>108</td><td>100</td><td>115</td><td>119</td><td>125</td><td>119</td></tr>
+          <tr><td>94</td><td>93</td><td>113</td><td>121</td><td>89</td><td>100</td><td>92</td><td>107</td><td>112</td><td>117</td><td>112</td></tr>
+          <tr><td>93</td><td>87</td><td>106</td><td>114</td><td>83</td><td>94</td><td>86</td><td>101</td><td>105</td><td>110</td><td>105</td></tr>
+          <tr><td>92</td><td>82</td><td>100</td><td>108</td><td>78</td><td>88</td><td>81</td><td>96</td><td>99</td><td>104</td><td>100</td></tr>
+          <tr><td>91</td><td>78</td><td>95</td><td>102</td><td>74</td><td>82</td><td>76</td><td>91</td><td>94</td><td>99</td><td>95</td></tr>
+          <tr><td>90</td><td>74</td><td>91</td><td>97</td><td>70</td><td>78</td><td>72</td><td>87</td><td>89</td><td>94</td><td>91</td></tr>
+          <tr class="avg-row"><td>99%ile Avg</td><td colspan="10" style="text-align:center; font-family:'Inter',sans-serif;">≈ 172 marks &nbsp;|&nbsp; Median: 174 &nbsp;|&nbsp; Range: 154 – 188</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ APR MATRIX ══ -->
+  <div id="apr-matrix" class="section">
+    <div class="sec-head"><h2>April 2026 — Percentile vs Marks Matrix</h2><span class="pill pill-apr">Session 2</span></div>
+    <div class="info-box">April's distribution is tighter and slightly more calibrated — 99%ile band sits in a narrower 158–192 range. This is partly because Session 2 candidates (10.3 lakh) were more uniform.</div>
+    <div class="matrix-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>Percentile</th>
+            <th>2 S1</th><th>2 S2</th>
+            <th>4 S1</th><th>4 S2</th>
+            <th>5 S1</th><th>5 S2</th>
+            <th>6 S1</th><th>6 S2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="top-row"><td>99.9</td><td>233</td><td>221</td><td>230</td><td>229</td><td class="cell-high">252</td><td>231</td><td>218</td><td class="cell-high">241</td></tr>
+          <tr><td>99.5</td><td>200</td><td>189</td><td>199</td><td>198</td><td>218</td><td>200</td><td>184</td><td>209</td></tr>
+          <tr><td>99</td><td>175</td><td>165</td><td>175</td><td>174</td><td class="cell-high">190</td><td>175</td><td class="cell-low">160</td><td>183</td></tr>
+          <tr><td>98.5</td><td>161</td><td>151</td><td>164</td><td>161</td><td>175</td><td>161</td><td>146</td><td>168</td></tr>
+          <tr><td>98</td><td>151</td><td>141</td><td>153</td><td>151</td><td>165</td><td>151</td><td>136</td><td>158</td></tr>
+          <tr><td>97.5</td><td>143</td><td>134</td><td>146</td><td>144</td><td>156</td><td>143</td><td>129</td><td>150</td></tr>
+          <tr><td>97</td><td>137</td><td>128</td><td>140</td><td>138</td><td>149</td><td>137</td><td>123</td><td>144</td></tr>
+          <tr><td>96.5</td><td>132</td><td>123</td><td>135</td><td>132</td><td>143</td><td>132</td><td>118</td><td>138</td></tr>
+          <tr><td>96</td><td>128</td><td>119</td><td>130</td><td>128</td><td>138</td><td>128</td><td>113</td><td>134</td></tr>
+          <tr><td>95.5</td><td>128</td><td>118</td><td>131</td><td>124</td><td>137</td><td>128</td><td>105</td><td>131</td></tr>
+          <tr><td>95</td><td>125</td><td>118</td><td>130</td><td>124</td><td>137</td><td>125</td><td>105</td><td>131</td></tr>
+          <tr><td>94</td><td>117</td><td>110</td><td>121</td><td>116</td><td>128</td><td>117</td><td>97</td><td>122</td></tr>
+          <tr><td>93</td><td>110</td><td>104</td><td>114</td><td>109</td><td>121</td><td>110</td><td>91</td><td>115</td></tr>
+          <tr><td>92</td><td>104</td><td>99</td><td>108</td><td>104</td><td>114</td><td>104</td><td>87</td><td>109</td></tr>
+          <tr><td>91</td><td>99</td><td>95</td><td>103</td><td>99</td><td>108</td><td>99</td><td>83</td><td>104</td></tr>
+          <tr><td>90</td><td>95</td><td>91</td><td>98</td><td>95</td><td>103</td><td>95</td><td>80</td><td>99</td></tr>
+          <tr class="avg-row"><td>99%ile Avg</td><td colspan="8" style="text-align:center; font-family:'Inter',sans-serif;">≈ 175 marks &nbsp;|&nbsp; Median: 175 &nbsp;|&nbsp; Range: 160 – 192</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ RANKS ══ -->
+  <div id="ranks" class="section">
+    <div class="sec-head"><h2>Percentile to All India Rank — 2026</h2><span class="pill pill-both">~15.5L Candidates</span></div>
+    <div class="info-box">
+      <strong>AIR Formula:</strong> AIR = (100 − Percentile) × 100 × Total Candidates ÷ 100. With ~15.5 lakh candidates, every 0.01 percentile shift roughly equals a rank movement of 155 positions. The competition gets exponentially tighter above 99.5 percentile.
+    </div>
+    <div class="rank-card">
+      <div class="rank-row head">
+        <div>Percentile</div><div>Expected AIR</div><div>Marks (Avg Shift)</div><div>What This Unlocks</div>
+      </div>
+      <div class="rank-row top-band">
+        <div class="pct">100</div>
+        <div class="top-rank">Rank 1 (26 tied)</div>
+        <div class="marks">286–300</div>
+        <div class="unlocks">JEE Advanced top contenders</div>
+      </div>
+      <div class="rank-row top-band">
+        <div class="pct">99.95+</div>
+        <div class="air">Top 775</div>
+        <div class="marks">235–285</div>
+        <div class="unlocks">IIT Bombay/Delhi CSE-ready scores</div>
+      </div>
+      <div class="rank-row">
+        <div class="pct">99.85–99.94</div>
+        <div class="air">775 – 2,325</div>
+        <div class="marks">215–235</div>
+        <div class="unlocks">Top NIT CSE / strong JEE Advanced</div>
+      </div>
+      <div class="rank-row">
+        <div class="pct">99.50–99.84</div>
+        <div class="air">2,325 – 7,750</div>
+        <div class="marks">185–215</div>
+        <div class="unlocks">NIT Trichy/Surathkal/Warangal CSE band</div>
+      </div>
+      <div class="rank-row">
+        <div class="pct">99.00–99.49</div>
+        <div class="air">7,750 – 15,500</div>
+        <div class="marks">165–185</div>
+        <div class="unlocks">Mid-tier NITs CSE; top NITs core branches</div>
+      </div>
+      <div class="rank-row">
+        <div class="pct">98.00–98.99</div>
+        <div class="air">15,500 – 31,000</div>
+        <div class="marks">140–165</div>
+        <div class="unlocks">NIT core branches; top IIITs</div>
+      </div>
+      <div class="rank-row">
+        <div class="pct">97.00–97.99</div>
+        <div class="air">31,000 – 46,500</div>
+        <div class="marks">120–140</div>
+        <div class="unlocks">Lower NITs; mid-tier IIITs</div>
+      </div>
+      <div class="rank-row">
+        <div class="pct">95.00–96.99</div>
+        <div class="air">46,500 – 77,500</div>
+        <div class="marks">100–120</div>
+        <div class="unlocks">GFTIs; lower IIITs; strong private universities</div>
+      </div>
+      <div class="rank-row">
+        <div class="pct">93.00–94.99</div>
+        <div class="air">77,500 – 1,08,500</div>
+        <div class="marks">87–100</div>
+        <div class="unlocks">JEE Adv. eligibility (General); lower NITs HS quota</div>
+      </div>
+      <div class="rank-row">
+        <div class="pct">90.00–92.99</div>
+        <div class="air">1,08,500 – 1,55,000</div>
+        <div class="marks">72–87</div>
+        <div class="unlocks">State govt colleges; mid-tier private universities</div>
+      </div>
+      <div class="rank-row">
+        <div class="pct">85.00–89.99</div>
+        <div class="air">1,55,000 – 2,32,500</div>
+        <div class="marks">58–72</div>
+        <div class="unlocks">State universities; private engineering colleges</div>
+      </div>
+      <div class="rank-row">
+        <div class="pct">80.00–84.99</div>
+        <div class="air">2,32,500 – 3,10,000</div>
+        <div class="marks">48–58</div>
+        <div class="unlocks">Mid-tier private colleges</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CUTOFF ══ -->
+  <div id="cutoff" class="section">
+    <div class="sec-head"><h2>JEE Advanced 2026 Qualifying Cutoff — Official</h2><span class="pill pill-both">Category-Wise</span></div>
+    <div class="info-box">
+      2026 cutoffs increased across all categories. A total of <strong>2,50,182 candidates</strong> qualified for JEE Advanced 2026. Cutoff is based on percentile (not raw marks) due to multi-shift normalisation. The biggest jump came in the ST category (+4.11 percentile), reflecting improved performance among reserved-category candidates this year.
+    </div>
+    <div class="cutoff-grid">
+      <div class="cutoff-cat">
+        <div class="cat-name">General (CRL)</div>
+        <div class="pct-val">93.41%</div>
+        <div class="marks-val">≈ 87–93 marks (avg shift)</div>
+        <div class="change up">↑ +0.31 from 2025</div>
+      </div>
+      <div class="cutoff-cat">
+        <div class="cat-name">Gen-EWS</div>
+        <div class="pct-val">82.42%</div>
+        <div class="marks-val">≈ 60–66 marks</div>
+        <div class="change up">↑ +2.03 from 2025</div>
+      </div>
+      <div class="cutoff-cat">
+        <div class="cat-name">OBC-NCL</div>
+        <div class="pct-val">80.92%</div>
+        <div class="marks-val">≈ 56–62 marks</div>
+        <div class="change up">↑ +1.49 from 2025</div>
+      </div>
+      <div class="cutoff-cat">
+        <div class="cat-name">SC</div>
+        <div class="pct-val">63.92%</div>
+        <div class="marks-val">≈ 38–44 marks</div>
+        <div class="change up">↑ +2.18 from 2025</div>
+      </div>
+      <div class="cutoff-cat">
+        <div class="cat-name">ST</div>
+        <div class="pct-val">52.02%</div>
+        <div class="marks-val">≈ 30–36 marks</div>
+        <div class="change up">↑ +4.11 from 2025</div>
+      </div>
+      <div class="cutoff-cat">
+        <div class="cat-name">PwD</div>
+        <div class="pct-val">0.0008%</div>
+        <div class="marks-val">Minimum threshold</div>
+        <div class="change neutral">≈ unchanged</div>
+      </div>
+    </div>
+    <div class="warn-box">
+      <strong>Note:</strong> 2026 cutoffs increased across all categories. A total of 2,50,182 candidates qualified for JEE Advanced 2026. Cutoff is based on percentile (not raw marks) due to multi-shift normalisation. The biggest jump came in the ST category (+4.11 percentile).
+    </div>
+  </div>
+
+  <!-- ══ TARGETS ══ -->
+  <div id="targets" class="section">
+    <div class="sec-head"><h2>Score Target Guidance — Calibrated to 2026</h2><span class="pill pill-both">2027 Prep</span></div>
+    <div class="warn-box">
+      <strong>Important:</strong> These targets are approximate (based on average shift difficulty) and shift with paper difficulty. Your actual goal should be to maximise your best percentile, not your raw marks. Aim 5–10 marks higher than these thresholds for safety.
+    </div>
+    <div class="target-grid">
+      <div class="target-row head">
+        <div class="t-pct">Target %ile</div>
+        <div class="t-marks">Marks Target</div>
+        <div class="t-air">Expected AIR</div>
+        <div class="t-unlocks">What This Unlocks</div>
+      </div>
+      <div class="target-row">
+        <div class="t-pct">99.5+</div>
+        <div class="t-marks">200–230</div>
+        <div class="t-air">Under 7,750</div>
+        <div class="t-unlocks">Top NITs CSE (Trichy/Surathkal/Warangal); strong JEE Advanced eligibility</div>
+      </div>
+      <div class="target-row">
+        <div class="t-pct">99–99.5</div>
+        <div class="t-marks">175–200</div>
+        <div class="t-air">7,750 – 15,500</div>
+        <div class="t-unlocks">Mid-tier NIT CSE; top NIT core branches</div>
+      </div>
+      <div class="target-row">
+        <div class="t-pct">98–99</div>
+        <div class="t-marks">160–175</div>
+        <div class="t-air">15,500 – 31,000</div>
+        <div class="t-unlocks">NIT core branches; top IIITs in CSE</div>
+      </div>
+      <div class="target-row">
+        <div class="t-pct">95–98</div>
+        <div class="t-marks">120–160</div>
+        <div class="t-air">31,000 – 77,500</div>
+        <div class="t-unlocks">Lower NITs, GFTIs, top private universities</div>
+      </div>
+      <div class="target-row">
+        <div class="t-pct">93–95</div>
+        <div class="t-marks">95–120</div>
+        <div class="t-air">77,500 – 1,08,500</div>
+        <div class="t-unlocks">JEE Advanced eligibility (Gen); state-quota NITs</div>
+      </div>
+      <div class="target-row">
+        <div class="t-pct">90–93</div>
+        <div class="t-marks">78–95</div>
+        <div class="t-air">1,08,500 – 1,55,000</div>
+        <div class="t-unlocks">Quality private universities, state institutes</div>
+      </div>
+      <div class="target-row">
+        <div class="t-pct">85–90</div>
+        <div class="t-marks">60–78</div>
+        <div class="t-air">1,55,000 – 2,32,500</div>
+        <div class="t-unlocks">State universities, mid-tier private colleges</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PREP ══ -->
+  <div id="prep" class="section">
+    <div class="sec-head"><h2>Preparation Guide — Last 3 Months + Exam Day</h2><span class="pill pill-both">2027 Strategy</span></div>
+
+    <div class="subj-grid">
+      <div class="subj-card subj-phy">
+        <div class="s-name">Physics</div>
+        <div class="s-target">80+/100</div>
+        <div class="s-tip">Mechanics + Electrodynamics carry ~55% weightage. Master these first.</div>
+      </div>
+      <div class="subj-card subj-chem">
+        <div class="s-name">Chemistry</div>
+        <div class="s-target">90+/100</div>
+        <div class="s-tip">Highest scoring subject — Inorganic + Physical = quick wins. Don't ignore NCERT.</div>
+      </div>
+      <div class="subj-card subj-math">
+        <div class="s-name">Mathematics</div>
+        <div class="s-target">75+/100</div>
+        <div class="s-tip">Calculus + Coordinate Geometry = 40% of paper. Practice 50+ problems daily.</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Combined Goal:</strong> 245+ marks for safe 99+ percentile across any shift difficulty.
+    </div>
+
+    <div class="tips-grid">
+      <div class="tip-section">
+        <h3>Last 3 Months Strategy</h3>
+        <div class="tip-item">
+          <div class="t-icon t-icon-blue">1</div>
+          <div class="t-text"><strong>Revision Cycle:</strong> Complete 3 full revisions — short, medium, and deep. Don't start new topics.</div>
+        </div>
+        <div class="tip-item">
+          <div class="t-icon t-icon-blue">2</div>
+          <div class="t-text"><strong>Mock Tests:</strong> Take 2–3 full-length papers every week with detailed post-mortem. Simulate real exam pressure.</div>
+        </div>
+        <div class="tip-item">
+          <div class="t-icon t-icon-blue">3</div>
+          <div class="t-text"><strong>Weak Areas:</strong> Block fixed days for your 2–3 weakest chapters. Targeted drilling outperforms general revision.</div>
+        </div>
+        <div class="tip-item">
+          <div class="t-icon t-icon-blue">4</div>
+          <div class="t-text"><strong>Previous Papers:</strong> Solve at least 5 years of JEE Main papers (2022–2026). Pattern recognition is a real edge.</div>
+        </div>
+        <div class="tip-item">
+          <div class="t-icon t-icon-blue">5</div>
+          <div class="t-text"><strong>Health:</strong> 7–8 hours of sleep is non-negotiable in the final 30 days. Cognitive performance drops hard without it.</div>
+        </div>
+      </div>
+
+      <div class="tip-section">
+        <h3>Exam-Day Game Plan</h3>
+        <div class="tip-item">
+          <div class="t-icon t-icon-gold">→</div>
+          <div class="t-text"><strong>Section Order:</strong> Pick your strongest subject first — early confidence boosts performance throughout.</div>
+        </div>
+        <div class="tip-item">
+          <div class="t-icon t-icon-gold">→</div>
+          <div class="t-text"><strong>Time Allocation:</strong> ~50–55 minutes per subject; 15–20 min buffer at end. Don't get stuck on one question.</div>
+        </div>
+        <div class="tip-item">
+          <div class="t-icon t-icon-gold">→</div>
+          <div class="t-text"><strong>Question Selection:</strong> Attempt sure-shot questions first; mark doubtful ones for review. Skip and return.</div>
+        </div>
+        <div class="tip-item">
+          <div class="t-icon t-icon-gold">→</div>
+          <div class="t-text"><strong>Risk Management:</strong> Negative marking applies to MCQs AND NVTs — avoid pure guessing. −1 adds up fast.</div>
+        </div>
+        <div class="tip-item">
+          <div class="t-icon t-icon-gold">→</div>
+          <div class="t-text"><strong>Last 15 Minutes:</strong> Switch to review-only mode. Resist attempting new questions in panic. Guard your score.</div>
+        </div>
+        <div class="tip-item">
+          <div class="t-icon t-icon-gold">→</div>
+          <div class="t-text"><strong>Mindset:</strong> Even toppers don't attempt all 75. <strong>Accuracy beats volume every time.</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="warn-box">
+      <strong>Success Mantra:</strong> Consistent practice + smart shift-aware strategy + composed exam-day execution = high JEE Main percentile. NTA's normalisation gives every candidate a fair playing field. Your job: maintain maximum accuracy. The system handles the rest.
+    </div>
+
+    <div class="sec-head" style="margin-top:28px"><h2>JEE Main 2026 — Exam Pattern</h2><span class="pill pill-both">Verified</span></div>
+    <div class="pattern-grid">
+      <div class="pattern-card"><div class="p-key">Mode</div><div class="p-val">Computer-Based (CBT)</div></div>
+      <div class="pattern-card"><div class="p-key">Duration</div><div class="p-val mono">3 hours (180 min)</div></div>
+      <div class="pattern-card"><div class="p-key">Subjects</div><div class="p-val">Physics, Chemistry, Maths</div></div>
+      <div class="pattern-card"><div class="p-key">Questions / Subject</div><div class="p-val mono">25 (20 MCQ + 5 NVT)</div></div>
+      <div class="pattern-card"><div class="p-key">Total Questions</div><div class="p-val mono">75</div></div>
+      <div class="pattern-card"><div class="p-key">Total Marks</div><div class="p-val mono">300</div></div>
+      <div class="pattern-card"><div class="p-key">Correct Answer</div><div class="p-val mono" style="color:var(--green)">+4 marks</div></div>
+      <div class="pattern-card"><div class="p-key">Wrong Answer</div><div class="p-val mono" style="color:var(--red)">−1 mark (MCQ & NVT)</div></div>
+      <div class="pattern-card"><div class="p-key">Unattempted</div><div class="p-val mono">0 marks</div></div>
+      <div class="pattern-card"><div class="p-key">Sessions / Year</div><div class="p-val">2 (Jan + Apr) — better used</div></div>
+      <div class="pattern-card"><div class="p-key">Languages</div><div class="p-val">13 (English, Hindi + 11 regional)</div></div>
+      <div class="pattern-card"><div class="p-key">Result Format</div><div class="p-val">NTA Score (7 decimal percentile)</div></div>
+    </div>
+    <div class="warn-box">
+      <strong>What Changed:</strong> All 5 NVTs per subject are now compulsory. Negative marking (−1) applies to NVTs as well. Random guessing on numericals is significantly riskier now.
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
